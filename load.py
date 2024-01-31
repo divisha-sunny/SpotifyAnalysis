@@ -8,3 +8,15 @@ import json
 from datetime import datetime
 import datetime
 import sqlite3
+
+DATABASE_LOCATION = "sqlite:///tracks.sqlite"
+
+if __name__ == "__main__":
+
+#Importing the songs_df from the Extract.py
+    load_df=extract.unique_df
+
+#Loading into Database
+    engine = sqlalchemy.create_engine(DATABASE_LOCATION)
+    conn = sqlite3.connect('tracks.sqlite')
+    cursor = conn.cursor()
