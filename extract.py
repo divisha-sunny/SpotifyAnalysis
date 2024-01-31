@@ -6,6 +6,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import pandas as pd
 import time
 import main
+import re
 
 load_dotenv()
 
@@ -97,5 +98,9 @@ filtered_audio_features = [feature for feature in audio_features if feature is n
 audio_features_df = pd.DataFrame(filtered_audio_features)
 
 merged_df = df.merge(audio_features_df, left_on='Track_ID', right_on='id', how='inner')
+
+merged_df['Genre'] = merged_df['Genre'].apply(lambda x: x[::-1])
+merged_df['Genre'] = merged_df['Genre'].apply(lambda x: re.search(r"'([^']+)'", x).group(1) if re.search(r"'([^']+)'", x) else None)
+merged_df['Genre'] = merged_df['Genre'].apply(lambda x: x[::-1])
 
 unique_df = merged_df.drop_duplicates(subset='Track_ID', keep='first')
